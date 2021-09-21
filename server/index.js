@@ -8,12 +8,11 @@ app.use(cors());
 app.use(express.json()); // req.body
 
 //get users
-
 app.get('/api/users', async(req, res) => {
   const sql = 'SELECT * from "users"';
   try {
     const users = await db.query(sql);
-    console.log(users.rows);
+    console.log(users);
     res.json(users.rows);
 
   } catch (err) {
