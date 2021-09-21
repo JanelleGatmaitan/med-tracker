@@ -2,7 +2,7 @@
 
 function App() {
   return (
-    <p>hello med tracker</p>
+    <p>hello medd tracker</p>
   );
 }
 
