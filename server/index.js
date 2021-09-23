@@ -12,9 +12,8 @@ app.get('/api/users', async(req, res) => {
   const sql = 'SELECT * from "users"';
   try {
     const users = await db.query(sql);
-    console.log(users);
+    console.log(users.rows);
     res.json(users.rows);
-
   } catch (err) {
     console.error(err.message);
   }
