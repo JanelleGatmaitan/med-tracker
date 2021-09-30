@@ -9,29 +9,55 @@ import {
   ModalCloseButton,
   useDisclosure } from '@chakra-ui/react';
   import { useState } from 'react';
+  import MedicationForm from '../components/medication-form';
 
-function Dashboard(props) {
-  const { isOpen, onOpen, onClose } = useDisclosure({
-    onOpen: () => console.log('tesefsdfsdt')
-  });
-  // const test = () => {
-  //   onOpen();
-  //   console.log('test');
+function Dashboard() {
+  // const getForm = (action) => {
+  //   if (action === 'add') {
+  //     return (
+  //       <FormControl>
+  //         <FormLabel>First name</FormLabel>
+  //         <Input placeholder="First name" />
+  //       </FormControl>
+  //     );
+  //   } else {
+  //     return (
+  //       <FormControl>
+  //         <FormLabel>Last name</FormLabel>
+  //         <Input placeholder="last name" />
+  //       </FormControl>
+  //     );
+  //   }
   // };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [action, setAction] = useState();
+
   return (
     <>
       <h1>Dashboard</h1>
-      <Button onClick={onOpen}>Open Modal</Button>
+      <Button id="add" onClick={(e) => {
+        const action = e.target.getAttribute("id");
+        setAction(action);
+        onOpen();
+      }}>Open Modal</Button>
+      <Button id="edit" onClick={(e) => {
+        const action = e.target.getAttribute("id");
+        setAction(action);
+        onOpen();
+      }}>edit</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>{`${action} Medicine`}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            asdasdasd
+            <MedicationForm action={action} />
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={() => {
+              console.log('submit form');
+              onClose();
+            }}>
               Save
             </Button>
           </ModalFooter>
