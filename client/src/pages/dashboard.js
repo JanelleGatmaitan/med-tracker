@@ -17,6 +17,7 @@ import {
   import { useState } from 'react';
   import { useFormik } from 'formik';
   import MedicationForm from '../components/medication-form';
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 function Dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,7 +30,7 @@ function Dashboard() {
     },
     onSubmit: values => {
       // alert(JSON.stringify(values, null, 2));
-      console.log('formik vbalues: ' + JSON.stringify(values, null, 2));
+      console.log('formik values: ' + JSON.stringify(values, null, 2));
     },
   });
 
@@ -72,68 +73,9 @@ function Dashboard() {
             </FormControl>
             <CheckboxGroup colorScheme="blue">
               <HStack mt={4}>
-                <Checkbox
-                  id="monday"
-                  value="monday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Monday
-                </Checkbox>
-                <Checkbox
-                  id="tuesday"
-                  value="tuesday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Tuesday
-                </Checkbox>
-                <Checkbox
-                  id="wednesday"
-                  value="wednesday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Wednesday
-                </Checkbox>
-                <Checkbox
-                  id="thursday"
-                  value="thursday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Thursday
-                </Checkbox>
-              </HStack>
+                {days.map((day) => <CheckBox key={day} day={day} onChange={formik.handleChange}/>)}
+               </HStack>
             </CheckboxGroup>
-                <CheckboxGroup colorScheme="blue">
-                  <HStack mt={4}>
-                <Checkbox
-                  id="friday"
-                  value="friday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Friday
-                </Checkbox>
-                <Checkbox
-                  id="saturday"
-                  value="saturday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Saturday
-                </Checkbox>
-                <Checkbox
-                  id="sunday"
-                  value="sunday"
-                  name="frequency"
-                  onChange={formik.handleChange}
-                >
-                  Sunday
-                </Checkbox>
-                  </HStack>
-                </CheckboxGroup>
           </ModalBody>
           <ModalFooter>
             <Button type="submit" colorScheme="blue" mr={3} onClick={() => {
@@ -146,6 +88,19 @@ function Dashboard() {
         </ModalContent>
       </Modal>
     </>
+  );
+}
+
+function CheckBox({day, onChange}) {
+  return (
+    <Checkbox
+      id={day}
+      value={day}
+      name="frequency"
+      onChange={onChange}
+    >
+      {day}
+    </Checkbox>
   );
 }
 
