@@ -15,9 +15,9 @@ create table "public"."users" (
 );
 
 create table "public"."medications" (
-  "medicationId" integer not null,
   "medicationName" text not null,
-  "notes" text,
+  "dose" text not null,
+  "frequency" text[] not null,
   "userId" integer not null,
   foreign key ("userId")
     references "users"("userId")

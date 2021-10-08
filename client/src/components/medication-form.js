@@ -10,7 +10,7 @@ import {
     CheckboxGroup
 } from "@chakra-ui/react"
 
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'All'];
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Required'),
@@ -43,6 +43,20 @@ function MedicationForm({ closeModal, action }) {
                     console.log(JSON.stringify(values, null, 2))
                     console.log('submit');
                     actions.setSubmitting(false)
+                    fetch('http://localhost:5000/api/addMedication', {
+                        method: 'POST',
+                        body: JSON.stringify(values),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
                 }, 1000)
             }}
         >
