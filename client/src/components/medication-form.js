@@ -7,42 +7,23 @@ import {
     Input,
     Button,
     Checkbox,
-    CheckboxGroup,
-    HStack
+    CheckboxGroup
 } from "@chakra-ui/react"
 
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'All'];
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Required'),
         dose: Yup.string().required('Required'),
-        frequency: Yup.boolean().oneOf([true], 'Select at least one day')
+        frequency: Yup.array().min(1).required('Select at least one day').nullable()
     });
-
-    // function validateName(value) {
-    //     let error
-    //     if (!value) {
-    //         error = "Name is required"
-    //     } else if (value.toLowerCase() !== "naruto") {
-    //         error = "Jeez! You're not a fan 😱"
-    //     }
-    //     return error
-    // }
 
     function getInitialValues(action) {
         if (action === 'add') {
             return {
                 name: '',
                 dose: '',
-                frequency: {
-                    monday: false,
-                    tuesday: false,
-                    wednesday: false,
-                    thursday: false,
-                    friday: false,
-                    saturday: false,
-                    sunday: false
-                }
+                frequency: []
             }
         }
         return {
@@ -88,7 +69,7 @@ function MedicationForm({ closeModal, action }) {
                     <Field name="frequency">
                         {({ field, form }) => (
                             <FormControl mt={4}  isInvalid={form.errors.frequency && form.touched.frequency}>
-                                <FormLabel>
+                                <FormLabel htmlFor="frequency">
                                     <CheckboxGroup>
                                         {days.map((day) => <CheckBox {...field} key={day} id={day} day={day} />)}
                                     </CheckboxGroup>
@@ -118,6 +99,7 @@ function CheckBox({ day, onChange }) {
             value={day}
             name="frequency"
             onChange={onChange}
+            m="8px"
         >
             {day}
         </Checkbox>
