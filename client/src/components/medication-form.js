@@ -40,8 +40,6 @@ function MedicationForm({ closeModal, action }) {
             onSubmit={(values, actions) => {
                 setTimeout(() => {
                     closeModal();
-                    console.log(JSON.stringify(values, null, 2))
-                    console.log('submit');
                     actions.setSubmitting(false)
                     fetch('http://localhost:5000/api/addMedication', {
                         method: 'POST',
@@ -65,7 +63,7 @@ function MedicationForm({ closeModal, action }) {
                     <Field name="name">
                         {({ field, form }) => (
                             <FormControl isInvalid={form.errors.name && form.touched.name}>
-                                <FormLabel htmlFor="name">First name</FormLabel>
+                                <FormLabel htmlFor="name">Medication name</FormLabel>
                                 <Input {...field} id="name" placeholder="name" />
                                 <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                             </FormControl>

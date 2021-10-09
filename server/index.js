@@ -29,8 +29,7 @@ app.post('/api/addMedication', async (req, res) => {
   `;
   try {
     const newMedication = await db.query(sql, params);
-    console.log('newMedication.rows: ', newMedication.rows);
-    res.json(newMedication.rows);
+    res.json(newMedication.rows[0]);
   } catch (err) {
     console.error(err.message);
   }

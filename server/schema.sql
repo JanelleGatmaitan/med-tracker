@@ -15,10 +15,12 @@ create table "public"."users" (
 );
 
 create table "public"."medications" (
+  "medicationId" serial,
   "medicationName" text not null,
   "dose" text not null,
   "frequency" text[] not null,
   "userId" integer not null,
+  primary key ("medicationId"),
   foreign key ("userId")
     references "users"("userId")
 );
