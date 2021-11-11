@@ -6,8 +6,7 @@ import {
   FormErrorMessage,
   Input,
   Button,
-  Checkbox,
-  CheckboxGroup
+  HStack
 } from "@chakra-ui/react"
 
 const validationSchema = Yup.object({
@@ -15,11 +14,56 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Required'),
 });
 
-function AuthForm(props) {
-  return (
-    <Formik>
+const initialValues = {
+  username: '',
+  password: ''
+}
 
-    </Formik>
+function AuthForm({ action }) {
+  console.log(action);
+  return (
+    <HStack>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={(values, actions) => {
+          setTimeout(() => {
+            actions.setSubmitting(false);
+          }, 1000)
+        }}
+      >
+        {(props) => (
+          <Form>
+            <Field name="name">
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.username && form.touched.username}>
+                  <FormLabel htmlFor="username">Username</FormLabel>
+                  <Input {...field} id="username" />
+                  <FormErrorMessage>{form.errors.username}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="password">
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.password && form.touched.password}>
+                  <FormLabel htmlFor="dose" mt={4}>Password</FormLabel>
+                  <Input {...field} id="password" />
+                  <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Button
+              mt={4}
+              colorScheme="blue"
+              isLoading={props.isSubmitting}
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </HStack>
   );
 }
 

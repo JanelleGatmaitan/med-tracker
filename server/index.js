@@ -35,6 +35,11 @@ app.post('/api/addMedication', async (req, res) => {
   }
 });
 
+//user registration
+app.post('/api/auth/register', async (req, res) => {
+
+});
+
 app.listen(process.env.DEV_SERVER_PORT, () => {
   console.log(`server has started on port ${process.env.DEV_SERVER_PORT}`);
 });
