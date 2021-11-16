@@ -37,7 +37,7 @@ app.post('/api/addMedication', async (req, res) => {
 
 //user registration
 app.post('/api/auth/register', async (req, res) => {
-
+  const { username, password } = req.body;
 });
 
 app.listen(process.env.DEV_SERVER_PORT, () => {

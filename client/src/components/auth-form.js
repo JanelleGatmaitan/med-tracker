@@ -29,6 +29,7 @@ function AuthForm({ action }) {
         onSubmit={(values, actions) => {
           setTimeout(() => {
             actions.setSubmitting(false);
+            console.log('auth form submitted');
           }, 1000)
         }}
       >
