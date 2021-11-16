@@ -10,16 +10,16 @@ import {
     CheckboxGroup
 } from "@chakra-ui/react"
 
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    const validationSchema = Yup.object({
-        name: Yup.string().required('Required'),
-        dose: Yup.string().required('Required'),
-        frequency: Yup.array().min(1).required('Select at least one day').nullable()
-    });
+const validationSchema = Yup.object({
+    name: Yup.string().required('Required'),
+    dose: Yup.string().required('Required'),
+    frequency: Yup.array().min(1).required('Select at least one day').nullable()
+});
 
-    function getInitialValues(action) {
-        if (action === 'add') {
+function getInitialValues(action) {
+        if (action === 'Add') {
             return {
                 name: '',
                 dose: '',
@@ -27,7 +27,9 @@ import {
             }
         }
         return {
-            name: ''
+            name: 'will need to get data from api',
+            dose: 'will need to get data from api',
+            frequency: []
         }
     }
 
@@ -36,6 +38,7 @@ function MedicationForm({ closeModal, action }) {
     return (
         <Formik
             initialValues={getInitialValues(action)}
+            enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
                 setTimeout(() => {

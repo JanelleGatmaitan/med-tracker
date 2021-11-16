@@ -17,12 +17,12 @@ function Dashboard() {
   return (
     <>
       <h1>Dashboard</h1>
-      <Button id="add" onClick={(e) => {
+      <Button id="Add" onClick={(e) => {
         const action = e.target.getAttribute("id");
         setAction(action);
         onOpen();
       }}>Add</Button>
-      <Button id="edit" onClick={(e) => {
+      <Button id="Edit" onClick={(e) => {
         const action = e.target.getAttribute("id");
         setAction(action);
         onOpen();
