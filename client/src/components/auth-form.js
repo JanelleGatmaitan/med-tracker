@@ -14,28 +14,36 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Required'),
 });
 
-const initialValues = {
-  username: '',
-  password: ''
-}
-
 function AuthForm({ action }) {
-  console.log(action);
   return (
     <HStack>
       <Formik
-        initialValues={initialValues}
+        initialValues={{username: '', password: ''}}
         validationSchema={validationSchema}
         onSubmit={(values, actions) => {
           setTimeout(() => {
             actions.setSubmitting(false);
             console.log('auth form submitted');
+            fetch('http://localhost:5000/api/auth/register', {
+              method: 'POST',
+              body: JSON.stringify(values),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Success:', data);
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
           }, 1000)
         }}
       >
         {(props) => (
           <Form>
-            <Field name="name">
+            <Field name="username">
               {({ field, form }) => (
                 <FormControl isInvalid={form.errors.username && form.touched.username}>
                   <FormLabel htmlFor="username">Username</FormLabel>
@@ -48,7 +56,7 @@ function AuthForm({ action }) {
               {({ field, form }) => (
                 <FormControl isInvalid={form.errors.password && form.touched.password}>
                   <FormLabel htmlFor="dose" mt={4}>Password</FormLabel>
-                  <Input {...field} id="password" />
+                  <Input {...field} id="password" type="password"/>
                   <FormErrorMessage>{form.errors.password}</FormErrorMessage>
                 </FormControl>
               )}
