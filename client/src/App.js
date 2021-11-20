@@ -1,24 +1,44 @@
 import {
   BrowserRouter as Router,
-  Switch,
   Route
 } from "react-router-dom";
 import About from './pages/about';
 import Dashboard from './pages/dashboard';
-import NoMatch from './pages/no-match';
 import Auth from './pages/auth';
+import NavBar from "./components/navbar";
+import { UserContext } from './lib/UserContext';
+import { useState } from "react";
+
+// function handleSignIn(result) {
+//   const { user, token } = result;
+//   window.localStorage.setItem('react-context-jwt', token);
+//   this.setState({ user });
+// }
+
+// function handleSignOut() {
+//   window.localStorage.removeItem('react-context-jwt');
+//   this.setState({ user: null });
+// }
 
 function App() {
+  const [user, setUser] = useState("initial user");
+  const handleSignIn = () => {
+    setUser('user');
+    console.log('user logged in');
+  }
+  const handleSignOut = () => {
+    setUser(null);
+    console.log('user signed out');
+  }
+
   return (
     <Router>
-      <Switch>
+      <UserContext.Provider value={{user, setUser}}>
+        <NavBar signIn={handleSignIn} signOut={handleSignOut}/>
         <Route path="/" exact component={About} />
         <Route path="/dashboard" exact component={Dashboard} />
         <Route path={["/register", "/sign-in"]} exact component={Auth} />
-        <Route path="*">
-          <NoMatch />
-        </Route>
-      </Switch>
+      </UserContext.Provider>
     </Router>
   );
 }
