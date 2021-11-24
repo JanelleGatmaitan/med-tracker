@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
+const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const app = express();
 
@@ -43,7 +44,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 //user authorization
-app.post('api/auth/sign-in', async (req, res) => {
+app.post('/api/auth/sign-in', (req, res) => {
   const { username, password } = req.body;
   const sql = `
     select "userId",
@@ -52,11 +53,25 @@ app.post('api/auth/sign-in', async (req, res) => {
     where "username" = $1
   `;
   const params = [username];
-  try {
-    const user = await db.query(sql, params);
-  } catch (err) {
-    console.error(err.message);
-  }
+  db.query(sql, params)
+    .then(result => {
+      const [user] = result.rows;
+      if (!user) {
+        throw new ClientError(401, 'invalid login');
+      }
+      const { userId, hashedPassword } = user;
+      return argon2
+        .verify(hashedPassword, password)
+        .then(isMatching => {
+          if (!isMatching) {
+            throw new ClientError(401, 'invalid login');
+          }
+          const payload = { userId, username };
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+          res.json({ token, user: payload });
+        });
+    })
+    .catch(err => console.log(err));
 });
 
 app.listen(process.env.DEV_SERVER_PORT, () => {
