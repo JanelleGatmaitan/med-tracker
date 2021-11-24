@@ -7,7 +7,6 @@ function NavBar({signIn, signOut}) {
   console.log('user: ', user);
   return (
     <div>
-      <h1>{user}</h1>
       {
         user && <Button>Sign Out</Button>
       }

@@ -1,7 +1,7 @@
 import AuthForm from "../components/auth-form";
 
 function Auth(props) {
-  return <AuthForm action={props.location.pathname}/>
+  return <AuthForm action={props.location.pathname} signIn={props.signIn}/>
 }
 
 export default Auth;

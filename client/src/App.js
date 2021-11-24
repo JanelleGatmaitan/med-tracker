@@ -22,8 +22,10 @@ import { useState } from "react";
 
 function App() {
   const [user, setUser] = useState(null);
-  const handleSignIn = () => {
-    setUser('user');
+  const handleSignIn = (result) => {
+    const { user, token } = result;
+    localStorage.setItem('react-context-jwt', token);
+    setUser({ user });
     console.log('user logged in');
   }
   const handleSignOut = () => {
@@ -34,10 +36,10 @@ function App() {
   return (
     <Router>
       <UserContext.Provider value={{user, setUser}}>
-        <NavBar signIn={handleSignIn} signOut={handleSignOut}/>
+        <NavBar signOut={handleSignOut}/>
         <Route path="/" exact component={About} />
         <Route path="/dashboard" exact component={Dashboard} />
-        <Route path={["/register", "/sign-in"]} exact component={Auth} />
+        <Route path={["/register", "/sign-in"]} exact render={(props) => <Auth {...props} signIn={handleSignIn}/>}/>
       </UserContext.Provider>
     </Router>
   );

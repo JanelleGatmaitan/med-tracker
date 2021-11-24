@@ -14,7 +14,8 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Required'),
 });
 
-function AuthForm({ action }) {
+function AuthForm({ action, signIn }) {
+  console.log('action:', action);
   return (
     <HStack>
       <Formik
@@ -23,7 +24,7 @@ function AuthForm({ action }) {
         onSubmit={(values, actions) => {
           setTimeout(() => {
             actions.setSubmitting(false);
-            console.log('auth form submitted');
+            console.log('form values:', values);
             fetch(`http://localhost:5000/api/auth${action}`, {
               method: 'POST',
               body: JSON.stringify(values),
@@ -31,9 +32,10 @@ function AuthForm({ action }) {
                 'Content-Type': 'application/json'
               }
             })
-              .then(response => response.json())
+              .then(res => res.json())
               .then(data => {
-                console.log('Success:', data);
+                console.log('data: ', data);
+                signIn(data);
               })
               .catch((error) => {
                 console.error('Error:', error);
