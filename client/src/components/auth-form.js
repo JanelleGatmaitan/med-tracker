@@ -24,7 +24,7 @@ function AuthForm({ action }) {
           setTimeout(() => {
             actions.setSubmitting(false);
             console.log('auth form submitted');
-            fetch('http://localhost:5000/api/auth/register', {
+            fetch(`http://localhost:5000/api/auth${action}`, {
               method: 'POST',
               body: JSON.stringify(values),
               headers: {

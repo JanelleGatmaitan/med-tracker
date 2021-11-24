@@ -8,18 +8,6 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // req.body
 
-//get users
-app.get('/api/users', async (req, res) => {
-  const sql = 'SELECT * from "users"';
-  try {
-    const users = await db.query(sql);
-    console.log(users.rows);
-    res.status(200).json(users.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
 //post new medication
 app.post('/api/addMedication', async (req, res) => {
   const { name, dose, frequency } = req.body;
@@ -39,7 +27,6 @@ app.post('/api/addMedication', async (req, res) => {
 //user registration
 app.post('/api/auth/register', async (req, res) => {
   const { username, password } = req.body;
-  console.log('req.body.username and password: ', username, password);
   try {
     const hashedPassword = await argon2.hash(password);
     const params = [username, hashedPassword];
@@ -50,6 +37,23 @@ app.post('/api/auth/register', async (req, res) => {
   `;
     const newUser = await db.query(sql, params);
     res.status(200).json(newUser.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//user authorization
+app.post('api/auth/sign-in', async (req, res) => {
+  const { username, password } = req.body;
+  const sql = `
+    select "userId",
+           "hashedPassword"
+    from "users"
+    where "username" = $1
+  `;
+  const params = [username];
+  try {
+    const user = await db.query(sql, params);
   } catch (err) {
     console.error(err.message);
   }

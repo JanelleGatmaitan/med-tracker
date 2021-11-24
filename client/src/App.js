@@ -21,7 +21,7 @@ import { useState } from "react";
 // }
 
 function App() {
-  const [user, setUser] = useState("initial user");
+  const [user, setUser] = useState(null);
   const handleSignIn = () => {
     setUser('user');
     console.log('user logged in');

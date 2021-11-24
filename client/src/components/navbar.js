@@ -2,12 +2,16 @@ import { Button } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { UserContext } from '../lib/UserContext';
 
-function NavBar({signIn}) {
+function NavBar({signIn, signOut}) {
   const { user } = useContext(UserContext);
+  console.log('user: ', user);
   return (
     <div>
       <h1>{user}</h1>
-      <Button onClick={() => signIn()}>sign in</Button>
+      {
+        user && <Button>Sign Out</Button>
+      }
+      {/* <Button onClick={() => user ? signOut() : signIn()}>sign in</Button> */}
     </div>
   );
 }
