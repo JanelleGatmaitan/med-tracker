@@ -8,13 +8,16 @@ import {
   Button,
   HStack
 } from "@chakra-ui/react"
+import { useContext } from 'react';
+import { UserContext } from '../lib/UserContext';
 
 const validationSchema = Yup.object({
   username: Yup.string().required('Required'),
   password: Yup.string().required('Required'),
 });
 
-function AuthForm({ action }) {
+function AuthForm({ action, signIn }) {
+  const {handleSignIn} = useContext(UserContext);
   return (
     <HStack>
       <Formik
@@ -23,17 +26,17 @@ function AuthForm({ action }) {
         onSubmit={(values, actions) => {
           setTimeout(() => {
             actions.setSubmitting(false);
-            console.log('auth form submitted');
-            fetch('http://localhost:5000/api/auth/register', {
+            console.log('form values:', values);
+            fetch(`http://localhost:5000/api/auth${action}`, {
               method: 'POST',
               body: JSON.stringify(values),
               headers: {
                 'Content-Type': 'application/json'
               }
             })
-              .then(response => response.json())
+              .then(res => res.json())
               .then(data => {
-                console.log('Success:', data);
+                handleSignIn(data);
               })
               .catch((error) => {
                 console.error('Error:', error);

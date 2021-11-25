@@ -2,23 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
+const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const app = express();
 
 app.use(cors());
 app.use(express.json()); // req.body
-
-//get users
-app.get('/api/users', async (req, res) => {
-  const sql = 'SELECT * from "users"';
-  try {
-    const users = await db.query(sql);
-    console.log(users.rows);
-    res.status(200).json(users.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
 
 //post new medication
 app.post('/api/addMedication', async (req, res) => {
@@ -39,7 +28,6 @@ app.post('/api/addMedication', async (req, res) => {
 //user registration
 app.post('/api/auth/register', async (req, res) => {
   const { username, password } = req.body;
-  console.log('req.body.username and password: ', username, password);
   try {
     const hashedPassword = await argon2.hash(password);
     const params = [username, hashedPassword];
@@ -53,6 +41,37 @@ app.post('/api/auth/register', async (req, res) => {
   } catch (err) {
     console.error(err.message);
   }
+});
+
+//user authorization
+app.post('/api/auth/sign-in', (req, res) => {
+  const { username, password } = req.body;
+  const sql = `
+    select "userId",
+           "hashedPassword"
+    from "users"
+    where "username" = $1
+  `;
+  const params = [username];
+  db.query(sql, params)
+    .then(result => {
+      const [user] = result.rows;
+      if (!user) {
+        throw new ClientError(401, 'invalid login');
+      }
+      const { userId, hashedPassword } = user;
+      return argon2
+        .verify(hashedPassword, password)
+        .then(isMatching => {
+          if (!isMatching) {
+            throw new ClientError(401, 'invalid login');
+          }
+          const payload = { userId, username };
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+          res.json({ token, user: payload });
+        });
+    })
+    .catch(err => console.log(err));
 });
 
 app.listen(process.env.DEV_SERVER_PORT, () => {
