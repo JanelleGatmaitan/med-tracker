@@ -5,11 +5,16 @@ import { UserContext } from '../lib/UserContext';
 function NavBar({signIn, signOut}) {
   const { user, handleSignIn, handleSignOut } = useContext(UserContext);
   return (
-    <div>
+    <nav>
+      <ul>
+        <li>
+          Home
+        </li>
+      </ul>
       {
         user && <Button onClick={handleSignOut}>Sign Out</Button>
       }
-    </div>
+    </nav>
   );
 }
 

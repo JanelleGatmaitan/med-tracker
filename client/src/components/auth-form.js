@@ -8,6 +8,8 @@ import {
   Button,
   HStack
 } from "@chakra-ui/react"
+import { useContext } from 'react';
+import { UserContext } from '../lib/UserContext';
 
 const validationSchema = Yup.object({
   username: Yup.string().required('Required'),
@@ -15,7 +17,7 @@ const validationSchema = Yup.object({
 });
 
 function AuthForm({ action, signIn }) {
-  console.log('action:', action);
+  const {handleSignIn} = useContext(UserContext);
   return (
     <HStack>
       <Formik
@@ -34,8 +36,7 @@ function AuthForm({ action, signIn }) {
             })
               .then(res => res.json())
               .then(data => {
-                console.log('data: ', data);
-                signIn(data);
+                handleSignIn(data);
               })
               .catch((error) => {
                 console.error('Error:', error);
