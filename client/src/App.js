@@ -9,34 +9,22 @@ import NavBar from "./components/navbar";
 import { UserContext } from './lib/UserContext';
 import { useState } from "react";
 
-// function handleSignIn(result) {
-//   const { user, token } = result;
-//   window.localStorage.setItem('react-context-jwt', token);
-//   this.setState({ user });
-// }
-
-// function handleSignOut() {
-//   window.localStorage.removeItem('react-context-jwt');
-//   this.setState({ user: null });
-// }
-
 function App() {
   const [user, setUser] = useState(null);
   const handleSignIn = (result) => {
     const { user, token } = result;
     localStorage.setItem('react-context-jwt', token);
     setUser({ user });
-    console.log('user logged in');
   }
   const handleSignOut = () => {
+    localStorage.removeItem('react-context-jwt');
     setUser(null);
-    console.log('user signed out');
   }
 
   return (
     <Router>
-      <UserContext.Provider value={{user, setUser}}>
-        <NavBar signOut={handleSignOut}/>
+      <UserContext.Provider value={{user, setUser, handleSignIn, handleSignOut}}>
+        <NavBar/>
         <Route path="/" exact component={About} />
         <Route path="/dashboard" exact component={Dashboard} />
         <Route path={["/register", "/sign-in"]} exact render={(props) => <Auth {...props} signIn={handleSignIn}/>}/>

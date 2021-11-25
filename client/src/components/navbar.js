@@ -3,14 +3,12 @@ import { useContext } from 'react';
 import { UserContext } from '../lib/UserContext';
 
 function NavBar({signIn, signOut}) {
-  const { user } = useContext(UserContext);
-  console.log('user: ', user);
+  const { user, handleSignIn, handleSignOut } = useContext(UserContext);
   return (
     <div>
       {
-        user && <Button>Sign Out</Button>
+        user && <Button onClick={handleSignOut}>Sign Out</Button>
       }
-      {/* <Button onClick={() => user ? signOut() : signIn()}>sign in</Button> */}
     </div>
   );
 }
