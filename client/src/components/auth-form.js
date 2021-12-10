@@ -26,7 +26,6 @@ function AuthForm({ action, signIn }) {
         onSubmit={(values, actions) => {
           setTimeout(() => {
             actions.setSubmitting(false);
-            console.log('form values:', values);
             fetch(`http://localhost:5000/api/auth${action}`, {
               method: 'POST',
               body: JSON.stringify(values),
@@ -37,6 +36,7 @@ function AuthForm({ action, signIn }) {
               .then(res => res.json())
               .then(data => {
                 handleSignIn(data);
+                window.location.pathname = 'dashboard';
               })
               .catch((error) => {
                 console.error('Error:', error);
